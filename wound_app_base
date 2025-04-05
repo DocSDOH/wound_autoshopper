@@ -1,0 +1,461 @@
+import React, { useState } from 'react';
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+  
+  const handleTabClick = (tabName) => {
+    setActiveTab(tabName);
+  };
+  
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <header className="bg-blue-800 text-white py-4 shadow-md">
+        <div className="container mx-auto px-4">
+          <h1 className="text-2xl font-bold">Street Medicine Wound Care Field Guide</h1>
+          <p className="text-sm mt-1 opacity-80">A harm reduction approach for patients with limited follow-up access</p>
+        </div>
+      </header>
+      
+      <nav className="bg-blue-700 text-white shadow-md overflow-x-auto">
+        <div className="container mx-auto px-4">
+          <ul className="flex space-x-1">
+            <NavTab 
+              name="overview" 
+              label="Overview" 
+              activeTab={activeTab} 
+              onClick={handleTabClick} 
+            />
+            <NavTab 
+              name="abscess" 
+              label="Abscess Care" 
+              activeTab={activeTab} 
+              onClick={handleTabClick} 
+            />
+            <NavTab 
+              name="xylazine" 
+              label="Xylazine Wounds" 
+              activeTab={activeTab} 
+              onClick={handleTabClick} 
+            />
+            <NavTab 
+              name="laceration" 
+              label="Lacerations" 
+              activeTab={activeTab} 
+              onClick={handleTabClick} 
+            />
+            <NavTab 
+              name="methsores" 
+              label="Meth Sores" 
+              activeTab={activeTab} 
+              onClick={handleTabClick} 
+            />
+            <NavTab 
+              name="preventative" 
+              label="Preventative Care" 
+              activeTab={activeTab} 
+              onClick={handleTabClick} 
+            />
+            <NavTab 
+              name="improvised" 
+              label="Improvised Materials" 
+              activeTab={activeTab} 
+              onClick={handleTabClick} 
+            />
+            <NavTab 
+              name="redflags" 
+              label="Red Flags" 
+              activeTab={activeTab} 
+              onClick={handleTabClick} 
+            />
+          </ul>
+        </div>
+      </nav>
+      
+      <main className="flex-grow container mx-auto px-4 py-6">
+        {activeTab === 'overview' && <OverviewSection />}
+        {activeTab === 'abscess' && <AbscessSection />}
+        {activeTab === 'xylazine' && <XylazineSection />}
+        {activeTab === 'laceration' && <LacerationSection />}
+        {activeTab === 'methsores' && <MethSoresSection />}
+        {activeTab === 'preventative' && <PreventativeSection />}
+        {activeTab === 'improvised' && <ImprovisedSection />}
+        {activeTab === 'redflags' && <RedFlagsSection />}
+      </main>
+      
+      <footer className="bg-gray-800 text-white py-4 text-center text-sm">
+        <div className="container mx-auto px-4">
+          <p>Field Guide for Street Medicine Programs and People Who Use Drugs</p>
+          <p className="mt-1 text-gray-400">
+            This guide is informational only and not a substitute for professional medical care when available.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+const NavTab = ({ name, label, activeTab, onClick }) => {
+  return (
+    <li 
+      className={`py-3 px-4 cursor-pointer hover:bg-blue-600 transition-colors ${
+        activeTab === name ? 'bg-blue-600 font-medium' : ''
+      }`} 
+      onClick={() => onClick(name)}
+    >
+      {label}
+    </li>
+  );
+};
+
+const CareTable = ({ title, description, headers, rows, notes }) => {
+  return (
+    <div className="rounded-lg overflow-hidden shadow mb-8 bg-white">
+      <div className="p-4 bg-blue-50 border-b">
+        <h2 className="text-xl font-bold text-blue-800">{title}</h2>
+        {description && <p className="mt-1 text-gray-600">{description}</p>}
+      </div>
+      
+      <div className="overflow-x-auto">
+        <table className="min-w-full">
+          <thead>
+            <tr className="bg-gray-100">
+              {headers.map((header, index) => (
+                <th 
+                  key={index} 
+                  className="px-4 py-3 text-left text-sm font-medium text-gray-700 uppercase tracking-wider border-b"
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, rowIndex) => (
+              <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                {row.map((cell, cellIndex) => (
+                  <td 
+                    key={cellIndex} 
+                    className="px-4 py-3 text-sm text-gray-700 border-b"
+                  >
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      
+      {notes && (
+        <div className="p-4 bg-yellow-50 border-t text-sm">
+          <p className="font-medium text-yellow-800">Special Notes:</p>
+          <p className="text-gray-700">{notes}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const OverviewSection = () => {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Three-Tier Approach for Post-Clinical Wound Care</h2>
+      <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <p className="mb-2">This guide assumes initial treatment has been provided by a clinical team and focuses on maintaining healing when follow-up may be delayed or impossible.</p>
+        <ul className="list-disc pl-6 mb-4">
+          <li className="mb-1">Recognizes challenges of consistent follow-up for homeless individuals</li>
+          <li className="mb-1">Provides options when traditional clinical supplies aren't available</li>
+          <li className="mb-1">Focuses on preventing complications and supporting healing</li>
+        </ul>
+      </div>
+      
+      <CareTable
+        title="General Wound Care Supplies"
+        description="Essential supplies in three tiers: ideal clinical, affordable store-bought, and emergency improvised options"
+        headers={['Need', 'Ideal Clinical Supplies', 'Store-Bought Alternatives', 'Emergency/Improvised Options']}
+        rows={[
+          ['Cleaning Solution', 'Sterile saline', 'Bottled saline wound wash', '1 tsp salt in 1 quart boiled water (cooled); bottled water'],
+          ['Wound Protection', 'Sterile gauze and medical tape', 'Band-aids, paper tape', 'Clean paper products, cloth strips from t-shirts'],
+          ['Infection Prevention', 'Antiseptic solutions, antimicrobial dressings', 'Antibiotic ointment, hydrogen peroxide', 'Diluted soap solution, honey'],
+          ['General Supplies', 'Sterile gloves, medical scissors, tweezers', 'Disposable gloves, clean household scissors', 'Hand washing, any clean tools available']
+        ]}
+        notes="Always wash hands before changing dressings or handling wounds, even if other supplies aren't available."
+      />
+      
+      <div className="bg-blue-50 rounded-lg p-4 shadow-inner">
+        <h3 className="font-bold text-blue-800 mb-2">General Wound Care Principles</h3>
+        <ul className="list-disc pl-6">
+          <li className="mb-1">Keep wounds clean and appropriately covered</li>
+          <li className="mb-1">Maintain proper moisture balance (not too wet, not too dry)</li>
+          <li className="mb-1">Monitor for signs of infection (increasing redness, pain, swelling)</li>
+          <li className="mb-1">Protect new tissue as it forms</li>
+          <li className="mb-1">Seek professional care for serious symptoms (see Red Flags section)</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+const AbscessSection = () => {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Abscess Aftercare (Post-I&D)</h2>
+      <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <p className="mb-2">After an abscess has been incised and drained (I&D), proper aftercare is essential to prevent recurrence and promote healing.</p>
+      </div>
+      
+      <CareTable
+        title="Abscess Aftercare Options"
+        headers={['Care Level', 'Cleaning', 'Packing/Filling', 'Cover Dressing', 'Securing']}
+        rows={[
+          ['Ideal Clinical', 'Sterile saline rinse', 'Iodoform gauze changed daily', 'Sterile gauze pad', 'Medical tape or roll gauze'],
+          ['Store-Bought', 'Bottled saline wound wash', 'Clean gauze moistened with saline', 'Non-adherent pads', 'Paper tape or self-adherent wrap'],
+          ['Emergency', 'Clean water with salt (1 tsp per quart)', 'Clean t-shirt strips soaked in salt water', 'Clean menstrual pad or diaper (cut to size)', 'Clean sock or t-shirt strip']
+        ]}
+        notes="Packing should be removed gradually over time, not all at once. Continue packing until the wound starts to heal from the inside out."
+      />
+      
+      <div className="bg-yellow-50 rounded-lg p-4 shadow-inner mt-6">
+        <h3 className="font-bold text-yellow-800 mb-2">Important Abscess Care Tips</h3>
+        <ul className="list-disc pl-6">
+          <li className="mb-1">Keep the wound clean and moist but not soaking wet</li>
+          <li className="mb-1">Change dressings daily or when soiled</li>
+          <li className="mb-1">Avoid injecting near the abscess site</li>
+          <li className="mb-1">If injecting elsewhere, use the limb above the abscess (closer to the heart) rather than below it</li>
+          <li className="mb-1">Seek medical attention if the abscess site becomes more painful, red, or swollen</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+const XylazineSection = () => {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Xylazine-Related Wound Care</h2>
+      <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <p className="mb-2">Xylazine ("tranq") is a veterinary sedative found in many street drugs, particularly in the opioid supply. It causes distinctive wounds that require special care.</p>
+        <p>Unlike typical injection-related wounds, xylazine wounds often:</p>
+        <ul className="list-disc pl-6 mb-4">
+          <li className="mb-1">Develop in areas away from injection sites</li>
+          <li className="mb-1">Form dark purple blisters that harden into dry eschar</li>
+          <li className="mb-1">Progress to deep ulcers quickly</li>
+          <li className="mb-1">Are difficult to heal and may require specialized care</li>
+        </ul>
+      </div>
+      
+      <CareTable
+        title="Xylazine Wound Care Options"
+        headers={['Care Level', 'For Dry Areas', 'For Wet/Exudative Areas', 'Edge Protection', 'Frequency']}
+        rows={[
+          ['Ideal Clinical', 'Moisture-retentive dressings', 'Absorbent antimicrobial dressings', 'Skin protectant or barrier cream', 'As directed (usually 1-3 days)'],
+          ['Store-Bought', 'Petroleum jelly with non-stick pad', 'Menstrual pads or adult diapers', 'Petroleum jelly or diaper rash cream', 'Daily if possible'],
+          ['Emergency', 'Honey + plastic wrap', 'Clean paper products', 'Petroleum jelly from packets', 'When soiled or daily']
+        ]}
+        notes="Gentle removal of loose eschar; never forcibly remove adherent eschar. Different areas of the same wound may need different treatments (dry vs. wet approaches)."
+      />
+      
+      <div className="bg-red-50 rounded-lg p-4 shadow-inner mt-6">
+        <h3 className="font-bold text-red-800 mb-2">Xylazine Wound Warning Signs</h3>
+        <p className="mb-3">Seek professional medical care immediately if you notice:</p>
+        <ul className="list-disc pl-6">
+          <li className="mb-1">Rapidly spreading necrosis (black tissue)</li>
+          <li className="mb-1">Exposed tendons, bones, or muscle</li>
+          <li className="mb-1">Difficulty moving extremities</li>
+          <li className="mb-1">Fever, chills, or increasing pain</li>
+          <li className="mb-1">Foul odor or colored discharge</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+const LacerationSection = () => {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Laceration Aftercare</h2>
+      <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <p className="mb-2">Lacerations are cuts or tears in the skin that may have been closed with sutures, staples, or skin adhesive. Proper aftercare prevents infection and promotes healing with minimal scarring.</p>
+      </div>
+      
+      <CareTable
+        title="Laceration Aftercare Options"
+        headers={['Care Level', 'First 48 Hours', 'After 48 Hours', 'Covering', 'Monitoring']}
+        rows={[
+          ['Ideal Clinical', 'Keep dry, covered', 'Gentle saline cleansing, antibiotic ointment', 'Non-stick pad with light bandage', 'Check for infection and intact closure'],
+          ['Store-Bought', 'Keep dry, band-aid', 'Gentle soap and water, petroleum jelly', 'Band-aids (various sizes)', 'Check daily for redness, swelling'],
+          ['Emergency', 'Keep dry, clean paper cover', 'Clean water rinse, petroleum jelly', 'Clean paper towel + tape', 'Keep elevated, protected']
+        ]}
+        notes="Sutures usually need removal in 7-14 days depending on location. Face/head sutures often come out sooner (5-7 days) while joint areas may stay in longer (10-14 days)."
+      />
+      
+      <div className="bg-green-50 rounded-lg p-4 shadow-inner mt-6">
+        <h3 className="font-bold text-green-800 mb-2">Laceration Healing Tips</h3>
+        <ul className="list-disc pl-6">
+          <li className="mb-1">Avoid soaking the wound for the first 24-48 hours</li>
+          <li className="mb-1">After 48 hours, gentle cleaning is usually safe</li>
+          <li className="mb-1">Keep the wound covered until it's fully closed</li>
+          <li className="mb-1">Avoid putting tension or stress on the wound while healing</li>
+          <li className="mb-1">If sutures/staples are present, avoid picking or pulling at them</li>
+          <li className="mb-1">After suture removal, continue to protect the area from sun exposure to minimize scarring</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+const MethSoresSection = () => {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">"Meth Sores" Aftercare</h2>
+      <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <p className="mb-2">"Meth sores" are skin lesions that often result from picking or scratching the skin, especially during formication (sensation of bugs crawling under the skin). Breaking the picking cycle is essential for healing.</p>
+      </div>
+      
+      <CareTable
+        title="Meth Sore Aftercare Options"
+        headers={['Care Level', 'Cleansing', 'Protection', 'Healing Support', 'Prevention']}
+        rows={[
+          ['Ideal Clinical', 'Gentle antimicrobial wash', 'Occlusive dressings', 'Moisturizing ointments', 'Covering multiple areas to prevent picking'],
+          ['Store-Bought', 'Gentle soap and water', 'Band-aids, waterproof if possible', 'Petroleum jelly', 'Gloves at night if possible'],
+          ['Emergency', 'Clean water', 'Clean plastic wrap + tape', 'Petroleum jelly packets', 'Clean socks over hands at night']
+        ]}
+        notes="Focus on breaking the pick-scratch-pick cycle; cover visible areas when possible to prevent unconscious picking, especially during sleep."
+      />
+      
+      <div className="bg-purple-50 rounded-lg p-4 shadow-inner mt-6">
+        <h3 className="font-bold text-purple-800 mb-2">Stopping the Picking Cycle</h3>
+        <ul className="list-disc pl-6">
+          <li className="mb-1">Cover areas most likely to be picked with occlusive dressings</li>
+          <li className="mb-1">Wear soft gloves or socks on hands while sleeping</li>
+          <li className="mb-1">Keep nails short to minimize damage from scratching</li>
+          <li className="mb-1">Apply cool compresses to areas that feel itchy or like they're "crawling"</li>
+          <li className="mb-1">Keep skin moisturized to reduce itching sensations</li>
+          <li className="mb-1">Try distraction techniques when the urge to pick arises</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+const PreventativeSection = () => {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Preventative Care & Harm Reduction</h2>
+      <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <p className="mb-2">Prevention is always better than treatment. These strategies help minimize harm and prevent common issues associated with substance use and homelessness.</p>
+      </div>
+      
+      <CareTable
+        title="Preventative Care by Body Area"
+        headers={['Body Area', 'Preventative Care', 'Harm Reduction Techniques', 'Benefits']}
+        rows={[
+          ['Nasal Care', 'Saline rinses, moisturizing with petroleum jelly', 'Use clean personal straws/tubes, avoid sharing', 'Prevents cracks/bleeding, reduces bloodborne infection risk'],
+          ['Mouth & Lips', 'Regular hydration, lip balm with SPF', 'Avoid high heat near mouth when smoking, use pipe covers', 'Prevents cracking, reduces burns and infections'],
+          ['Feet & Legs', 'Keep dry, use corn starch/baby powder, compression socks', 'Avoid injecting in legs/feet, elevate when possible', 'Reduces swelling, prevents blisters/ulcers'],
+          ['Injection Sites', 'Rotate sites, clean before use, apply pressure after', 'Use sterile supplies, release tourniquets after flagging', 'Prevents track marks, abscesses, vein damage']
+        ]}
+        notes="These preventative measures can significantly reduce the risk of infections and complications, even in challenging living conditions."
+      />
+      
+      <div className="bg-indigo-50 rounded-lg p-4 shadow-inner mt-6">
+        <h3 className="font-bold text-indigo-800 mb-2">Basic Physical Health Tips</h3>
+        <ul className="list-disc pl-6">
+          <li className="mb-1">Stay hydrated - aim for 6-8 glasses of water daily when possible</li>
+          <li className="mb-1">Wash hands regularly or use hand sanitizer when available</li>
+          <li className="mb-1">Change socks and underwear as often as possible</li>
+          <li className="mb-1">Try to eat at least one substantial meal daily</li>
+          <li className="mb-1">When possible, elevate feet and legs to reduce swelling</li>
+          <li className="mb-1">Protect skin from sun exposure with clothing or sunscreen when available</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+const ImprovisedSection = () => {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Improvised Material Uses</h2>
+      <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <p className="mb-2">When standard wound care supplies aren't available, these alternatives can be used temporarily. Always replace with proper medical supplies when possible.</p>
+      </div>
+      
+      <CareTable
+        title="Improvised Materials Guide"
+        headers={['Clinical Supply', 'Common Alternative', 'How to Use', 'Limitations']}
+        rows={[
+          ['Gauze', 'Clean t-shirts, menstrual pads, diapers', 'Cut to size needed, wash if possible first', 'Less absorbent, not sterile'],
+          ['Non-stick layer', 'Plastic wrap, wax paper, plastic bags', 'Place over wound with petroleum jelly', 'Can trap moisture/cause maceration'],
+          ['Saline', 'Salt water solution (1 tsp salt:1 qt water)', 'Boil water first, let cool, use within 24hrs', 'Not sterile, limited shelf life'],
+          ['Medical tape', 'Paper tape, cloth strips, tube socks', 'Secure loosely, check circulation', 'May cause irritation, can slip'],
+          ['Wound cleanser', 'Mild soap, bottled water', 'Dilute soap heavily, rinse thoroughly', 'May be irritating to open wounds']
+        ]}
+        notes="Improvised materials should be as clean as possible. If available, boiling fabric items for 10 minutes can help reduce contamination."
+      />
+      
+      <div className="bg-orange-50 rounded-lg p-4 shadow-inner mt-6">
+        <h3 className="font-bold text-orange-800 mb-2">Improvisation Tips</h3>
+        <ul className="list-disc pl-6">
+          <li className="mb-1">Clean hands thoroughly before handling any wound care materials</li>
+          <li className="mb-1">If possible, clean improvised materials before use</li>
+          <li className="mb-1">Check improvised dressings more frequently than you would standard dressings</li>
+          <li className="mb-1">Avoid using materials with dyes, fragrances, or other additives on open wounds</li>
+          <li className="mb-1">Cotton t-shirts are often the most versatile emergency material</li>
+          <li className="mb-1">Paper products work better for absorption, cloth works better for securing</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+const RedFlagsSection = () => {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Red Flags - When to Seek Immediate Care</h2>
+      <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <p className="mb-2">Some wound symptoms require professional medical attention. Don't delay seeking care for these warning signs.</p>
+      </div>
+      
+      <CareTable
+        title="Warning Signs & Required Actions"
+        headers={['Warning Sign', 'What It Might Mean', 'Action Needed']}
+        rows={[
+          ['Increasing redness, warmth, swelling', 'Infection worsening', 'Seek care within 24 hours'],
+          ['Red streaks extending from wound', 'Lymphangitis/blood infection', 'Emergency department immediately'],
+          ['Fever, chills, confusion', 'Systemic infection', 'Emergency department immediately'],
+          ['Foul odor, green/yellow drainage', 'Advanced infection', 'Seek care within 24 hours'],
+          ['Exposed bone, tendon, muscle', 'Deep tissue involvement', 'Emergency department immediately'],
+          ['Significant bleeding', 'Damaged blood vessel', 'Apply pressure and seek emergency care']
+        ]}
+        notes="When in doubt about the seriousness of a wound, err on the side of caution and seek medical attention."
+      />
+      
+      <div className="bg-red-100 rounded-lg p-4 shadow-inner mt-6">
+        <h3 className="font-bold text-red-800 mb-2">Life-Threatening Warning Signs</h3>
+        <p className="mb-3">Call 911 or go to the emergency department immediately for:</p>
+        <ul className="list-disc pl-6">
+          <li className="mb-1">Uncontrolled bleeding that doesn't stop with pressure</li>
+          <li className="mb-1">Severe shortness of breath or difficulty breathing</li>
+          <li className="mb-1">High fever with confusion or disorientation</li>
+          <li className="mb-1">Severe pain that suddenly worsens</li>
+          <li className="mb-1">Loss of consciousness or extreme weakness</li>
+        </ul>
+      </div>
+      
+      <div className="bg-blue-50 rounded-lg p-4 shadow-inner mt-6">
+        <h3 className="font-bold text-blue-800 mb-2">Local Resources</h3>
+        <p className="mb-3">Insert local information such as:</p>
+        <ul className="list-disc pl-6">
+          <li className="mb-1">Street medicine team contact information</li>
+          <li className="mb-1">Low-barrier clinics and hours</li>
+          <li className="mb-1">Hospital emergency departments with good reputations for treating PWUD</li>
+          <li className="mb-1">Syringe services programs that offer wound care</li>
+          <li className="mb-1">Mobile health van schedules and locations</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export default App;
